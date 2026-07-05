@@ -70,3 +70,4 @@ hana_expert_kb.json
 diagnostician_kb.json
 os_deploy_kb.json
 *.swp
+.claude/scheduled_tasks.lock
