@@ -1,0 +1,47 @@
+---
+# DCI settings file (EXAMPLE)
+# Generated per-hostname by: python -m tools.configure_target generate <hostname> [topic]
+# Copy to settings_current_<hostname>.yml with real values.
+
+local_repo: /home/dci
+machine_network_cidr: 10.x.x.0/24
+machine_network_ip: "{{ machine_network_cidr | nthhost(55) }}"
+domain: example.corp
+jumpbox: jumpbox-hostname
+
+lab:
+  provisioner_dir: /home/beaker
+  dhcp_start: "{{ machine_network_cidr | ipaddr(41) | ipaddr('address') }}"
+  dhcp_end: "{{ machine_network_cidr | ipaddr(67) | ipaddr('address') }}"
+  dns_server: 10.x.x.10
+  ntp_server: 10.x.x.185
+  router: 10.x.x.1
+  build_bridge: false
+  bridge_interface: enp1s0
+
+  system_inventory:
+    target-1.example.corp:
+      ip_address: 10.x.x.41
+      mac: "xx:xx:xx:xx:xx:xx"
+      arch: x86_64
+      power_address: target-1-bmc.example.corp
+      power_user: admin
+      power_password: CHANGE_ME
+      power_type: ipmitool_lanplus
+
+topics:
+  - topic: RHEL-10.2
+    archs:
+      - x86_64
+    with_debug: true
+    systems:
+      - fqdn: target-1.example.corp
+        ks_meta:
+          - no_autopart: true
+        ks_append: |
+          zerombr
+          clearpart --all --initlabel
+          reqpart
+          part /boot --size=1024
+          part swap --size=4096
+          part / --grow

@@ -1,0 +1,13 @@
+title = "DCI Multi-Agent gitleaks config"
+
+[allowlist]
+  description = "Allow known safe patterns"
+  paths = [
+    '''requirements\.lock''',
+    '''requirements-dev\.lock''',
+    '''relay-requirements\.lock''',
+    '''\.env\.example''',
+    '''secrets\.example\.yml''',
+    '''test_onboarding\.py''',
+    '''test_integration\.py''',
+  ]

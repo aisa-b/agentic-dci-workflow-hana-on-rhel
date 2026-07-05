@@ -1,0 +1,48 @@
+# DCI Relay Daemon — systemd user service
+#
+# Install:
+#   mkdir -p ~/.config/systemd/user
+#   cp container/dci-relay.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user enable --now dci-relay.service
+#
+# Logs:
+#   journalctl --user -u dci-relay.service -f
+#   podman logs dci-relay
+#   tail -f ~/dci-agent/logs/relay.log
+#
+# Restart policy:
+#   - Restarts on failure (non-zero exit) with increasing delay
+#   - Does NOT restart on clean exit (code 0) — that means the daemon
+#     decided to stop, not a crash
+#   - Gives up after 5 rapid failures (StartLimitBurst) within 60s
+#     to prevent infinite crash loops
+#   - After giving up, manual intervention is needed:
+#     systemctl --user reset-failed dci-relay.service
+#     systemctl --user start dci-relay.service
+
+[Unit]
+Description=DCI Agent Relay Daemon (containerized)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+# Use start-fg which runs podman attached (not -d)
+ExecStartPre=/bin/bash %h/dci-agent/container/relay.sh clean
+ExecStart=/bin/bash %h/dci-agent/container/relay.sh start-fg
+ExecStop=/bin/bash %h/dci-agent/container/relay.sh stop
+
+# Ensure podman gets enough time to stop gracefully
+TimeoutStopSec=30
+
+# Don't let systemd kill leftover processes — podman manages them
+KillMode=process
+
+[Install]
+WantedBy=default.target

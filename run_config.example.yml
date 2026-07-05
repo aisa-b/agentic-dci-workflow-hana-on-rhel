@@ -1,0 +1,86 @@
+# =============================================================================
+# DCI Multi-Agent -- Run Configuration (EXAMPLE)
+#
+# Copy to run_config.yml and fill in real values for your environment.
+# This is the SINGLE SOURCE OF TRUTH for all run settings.
+# Both the Mac agent and the relay read this file.
+# =============================================================================
+
+# -- What to test --
+target: target-1.example.corp
+rhel_topic: RHEL-10.2
+
+# -- Agent behavior --
+max_fix_attempts: 5
+verbosity: 0
+
+# -- LLM --
+model: claude-opus-4-6
+vertex_region: global
+
+# -- Jumpbox paths (update for your environment) --
+jumpbox_repo_root: /agentic-dci-workflow
+# Hooks: git URL cloned/pulled on the jumpbox before each run
+jumpbox_hooks_dir: https://github.com/your-org/your-hooks-repo.git
+# Local checkout of the hooks repo (relative to this repo root)
+local_hooks_dir: your-hooks-checkout-dir
+jumpbox_host: jumpbox.example.corp
+jumpbox_user: your-username
+target_user: root
+
+# -- Network (used by settings generation and configure_sap_clone.sh) --
+domain: example.corp
+network:
+  router: 10.x.x.1
+  dns_server: 10.x.x.10
+  ntp_server: 10.x.x.185
+  cidr_mask: /24
+
+# -- Git identity for agent commits --
+git_committer_name: DCI Agent
+git_committer_email: dci-agent@localhost
+git_remote: origin
+github_remote_url: "git@github.com:aisa-b/agentic-dci-workflow.git"
+
+# -- Pub/Sub topic/subscription names --
+pubsub_commands_topic: dci-commands
+pubsub_results_topic: dci-results
+pubsub_results_sub: dci-results-agent-sub
+pubsub_commands_sub: dci-commands-relay-sub
+
+# -- Safety limits --
+relay_session_timeout_hours: 12
+workflow_timeout_seconds: 7200
+
+# -- Banned patterns (safety enforcement) --
+# Hosts and paths that must NEVER be accessed
+banned_hosts:
+  - "banned-host.example.corp"
+banned_paths:
+  - "/old/repo/path"
+
+# -- Domain --
+domain: example.corp
+
+# -- Disk map (hostname -> install disk identifier) --
+# One-time setup per server via: python -m tools.configure_target discover <hostname>
+disk_map:
+  target-1: scsi-XXXXXXXXXXXXXXXXX
+  target-2: scsi-XXXXXXXXXXXXXXXXX
+
+# -- Default kickstart partitioning --
+default_ks_append: |
+  zerombr
+  clearpart --all --initlabel
+  reqpart
+  part /boot --size=1024
+  part swap --size=4096
+  part / --grow
+
+# -- Server profiles --
+servers:
+  target-1:
+    fqdn: target-1.example.corp
+
+  target-2:
+    fqdn: target-2.example.corp

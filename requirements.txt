@@ -1,0 +1,8 @@
+anthropic[vertex]>=0.49.0,<1.0
+google-cloud-pubsub>=2.23.0,<3.0
+python-dotenv>=1.0.0,<2.0
+paramiko>=3.0.0,<4.0
+pyyaml>=6.0,<7.0
+mcp>=1.0.0,<2.0
+sentence-transformers>=2.2.0,<6.0
+numpy>=1.24.0,<3.0

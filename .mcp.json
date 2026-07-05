@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "dci-relay": {
+      "type": "stdio",
+      "command": "bash",
+      "args": ["scripts/run-mcp-server.sh"],
+      "cwd": "."
+    }
+  }
+}

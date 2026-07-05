@@ -1,0 +1,22 @@
+FROM registry.access.redhat.com/ubi9/python-312:latest
+
+USER root
+
+RUN dnf install -y git-core && dnf clean all
+
+WORKDIR /opt/app-root/src
+
+COPY relay-requirements.txt .
+RUN pip install --no-cache-dir -r relay-requirements.txt
+
+COPY relay/ relay/
+COPY container/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# At runtime, the host repo is mounted at /repo so git pull and
+# run_config.yml updates work without rebuilding the image.
+# Secrets are mounted via relay.sh (never baked into the image):
+#   -v /path/to/gcp-key.json:/secrets/gcp-sa-key.json:ro
+#   -v /path/to/ssh-key:/secrets/ssh-key:ro
+
+ENTRYPOINT ["/entrypoint.sh"]

@@ -1,0 +1,26 @@
+[project]
+name = "agentic-dci-workflow"
+version = "0.1.0"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --tb=short"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+]
+ignore = [
+    "E501",   # line length — handled by formatter
+    "E402",   # module-level import not at top — needed for config bootstrap
+    "E741",   # ambiguous variable names (a, b for cosine_similarity)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E"]

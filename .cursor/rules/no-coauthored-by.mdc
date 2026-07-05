@@ -1,0 +1,26 @@
+---
+description: Never include Co-authored-by Cursor attribution in commits
+alwaysApply: true
+---
+
+# No Co-authored-by: Cursor
+
+NEVER include `Co-authored-by: Cursor <cursoragent@cursor.com>` or any variation of `Co-authored-by: Cursor` in commit messages, PR descriptions, code comments, or any file content.
+
+## Rules
+
+- Strip `Co-authored-by` trailers from all commit messages before committing
+- Never add `Co-authored-by` lines when creating commits
+- If a git hook or automation injects it, amend the commit to remove it
+- Do not include Cursor attribution in PR bodies or descriptions
+- Do not leave any trace of Cursor co-authorship anywhere in the repository
+
+## When committing
+
+Always use `--no-gpg-sign` is NOT required, but you MUST ensure the commit message body does NOT contain any line matching:
+
+```
+Co-authored-by: Cursor*
+```
+
+If you see it in `git log -1`, immediately amend to remove it.
