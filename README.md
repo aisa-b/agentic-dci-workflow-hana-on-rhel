@@ -16,7 +16,7 @@ learned. Structural safety controls on a separate relay machine ensure
 the agent can't delete code, brick servers, or access systems outside
 its scope.
 
-The SAP infrastructure is reachable only via Citrix — no VPN, no direct SSH.
+The target infrastructure is on an isolated network with no VPN or direct SSH.
 The agent bridges this gap through a 5-hop execution chain (operator → Pub/Sub
 → relay → jumpbox → target) with Google Cloud Pub/Sub as the sole connectivity
 layer. A unified knowledge base accumulates fix history across runs — the
