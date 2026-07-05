@@ -360,7 +360,7 @@ Two methods:
 
 **Method A -- Google Cloud Console (recommended, no clipboard needed):**
 
-1. Inside Citrix, open a browser
+1. On the relay machine, open a browser
 2. Go to https://console.cloud.google.com/iam-admin/serviceaccounts?project=<your-gcp-project>
 3. Click `dci-agent-relay` → **Keys** tab → **Add Key** → **Create new key** → **JSON**
 4. File downloads directly to relay-host
@@ -370,7 +370,7 @@ Two methods:
 mv ~/Downloads/<your-gcp-project>-*.json /sapmnt/home/<your-username>/Desktop/multi-agent-dci/dci-relay-sa-key.json
 ```
 
-**Method B -- Manual copy-paste via Citrix:**
+**Method B -- Manual copy-paste via remote access:**
 
 1. On your machine: `cat infra/dci-relay-sa-key.json` (copy from terminal)
 2. On relay-host: `vi dci-relay-sa-key.json` → `i` → paste → `Esc` → `:wq`

@@ -318,7 +318,7 @@ machine you control.
 ### Why not use a VPN or direct SSH?
 
 Your machine is on the operator network. The jumpbox is on the remote network.
-There is no VPN between them. Citrix exists but is unreliable.
+There is no VPN between them. Only HTTPS outbound is available from both sides.
 
 The only reliable connection both networks share is Google Cloud (HTTPS
 outbound). Pub/Sub uses HTTPS, so it works from both sides.

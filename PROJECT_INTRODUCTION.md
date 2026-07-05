@@ -20,7 +20,7 @@ gained was trapped in the engineer's head.
 
 ## The Constraint: Network Isolation
 
-The SAP lab network is reachable only through Citrix — there is no VPN
+The target lab network is on an isolated network with no VPN
 access. An AI agent running on a developer's machine cannot SSH directly
 into the lab. This rules out the straightforward approach of giving an
 LLM direct shell access to the infrastructure. We needed a message-based
@@ -32,7 +32,7 @@ side to expose endpoints to the other.
 The system uses Claude Opus 4.6 as an autonomous agent that can diagnose,
 plan, fix, and re-run the entire DCI pipeline without human
 intervention. Google Cloud Pub/Sub acts as the message bridge between the
-developer's machine (operator network) and the SAP lab (remote network
+developer's machine (operator network) and the target lab (remote network
 network). Both sides can reach Google Cloud via HTTPS — neither needs to
 accept inbound connections.
 
