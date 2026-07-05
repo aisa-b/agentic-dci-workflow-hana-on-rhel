@@ -126,7 +126,7 @@ FAILURE_CATEGORIES = {
     ],
     "sap_hana_install": [
         "hdbinst", "hdblcm", "hana install", "sid ",
-        "sapcontrol", "hdb ", "nktadm", "sidadm",
+        "sapcontrol", "hdb ", "hdbadm", "sidadm",
         "license", "hana media",
     ],
     "upstream_bug": [

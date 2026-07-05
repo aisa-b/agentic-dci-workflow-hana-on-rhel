@@ -181,7 +181,7 @@ Focus area: <specific hint: selinux, tuned, storage, packages, network>
 ```
 Investigate a SAP HANA failure on <fqdn>.
 Target: <fqdn>
-HANA SID: NKT (Instance 10, user nktadm)
+HANA SID: HDB (Instance 10, user hdbadm)
 Failing task: <exact task name>
 Error: <exact error message>
 Phase: <3 or 4> (<HANA Install or PBO Benchmark>)

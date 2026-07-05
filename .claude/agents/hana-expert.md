@@ -16,17 +16,17 @@ The DCI workflow installs SAP HANA on bare metal as part of a benchmarking pipel
 The HANA installation is automated via Ansible and may be in any state: not yet
 installed, partially installed, installed but not running, or running.
 
-- **SID:** NKT
+- **SID:** HDB
 - **Instance Number:** 10
-- **OS user:** nktadm
-- **HANA paths:** `/hana/data/NKT`, `/hana/log/NKT`, `/hana/shared/NKT`
-- **SAP system path:** `/usr/sap/NKT`
+- **OS user:** hdbadm
+- **HANA paths:** `/hana/data/HDB`, `/hana/log/HDB`, `/hana/shared/HDB`
+- **SAP system path:** `/usr/sap/HDB`
 - **Install logs:** `/var/tmp/hdbinst.log`, `/var/tmp/hdblcm.log`
-- **Trace directory:** `/hana/shared/NKT/HDB10/*/trace/`
-- **Config directory:** `/hana/shared/NKT/global/hdb/custom/config/`
+- **Trace directory:** `/hana/shared/HDB/HDB10/*/trace/`
+- **Config directory:** `/hana/shared/HDB/global/hdb/custom/config/`
 
 These values come from `dci-hooks/config-variables.yml`
-(`hana_sid: NKT`, `hana_instance_nr: "10"`). If they change, update this file.
+(`hana_sid: HDB`, `hana_instance_nr: "10"`). If they change, update this file.
 
 ## Investigation Protocol
 
@@ -37,11 +37,11 @@ remaining checks provide context for WHY it is not installed.
 ### 1. Is HANA installed?
 
 ```
-ls -la /hana/shared/NKT/ 2>/dev/null || echo "HANA shared dir not found"
-ls -la /usr/sap/NKT/ 2>/dev/null || echo "SAP system dir not found"
-ls -la /hana/data/NKT/ 2>/dev/null || echo "HANA data dir not found"
-ls -la /hana/log/NKT/ 2>/dev/null || echo "HANA log dir not found"
-id nktadm 2>/dev/null || echo "nktadm user does not exist"
+ls -la /hana/shared/HDB/ 2>/dev/null || echo "HANA shared dir not found"
+ls -la /usr/sap/HDB/ 2>/dev/null || echo "SAP system dir not found"
+ls -la /hana/data/HDB/ 2>/dev/null || echo "HANA data dir not found"
+ls -la /hana/log/HDB/ 2>/dev/null || echo "HANA log dir not found"
+id hdbadm 2>/dev/null || echo "hdbadm user does not exist"
 ```
 
 If none of these exist, HANA is not installed. Continue to check 5 (install logs)
@@ -50,16 +50,16 @@ and 6 (OS prerequisites) to understand why.
 ### 2. HANA version and instance info
 
 ```
-su - nktadm -c "HDB version"
-su - nktadm -c "HDB info"
+su - hdbadm -c "HDB version"
+su - hdbadm -c "HDB info"
 /usr/sap/hostctrl/exe/saphostctrl -function ListInstances
 ```
 
 ### 3. Is HANA running?
 
 ```
-su - nktadm -c "sapcontrol -nr 10 -function GetProcessList"
-su - nktadm -c "sapcontrol -nr 10 -function GetSystemInstanceList"
+su - hdbadm -c "sapcontrol -nr 10 -function GetProcessList"
+su - hdbadm -c "sapcontrol -nr 10 -function GetSystemInstanceList"
 systemctl status sapinit
 ps aux | grep -E '[h]db|[s]apstart|[n]ameserver|[i]ndexserver'
 ```
@@ -73,8 +73,8 @@ YELLOW means starting, GRAY means stopped, RED means crashed.
 ### 4. HANA configuration
 
 ```
-cat /hana/shared/NKT/global/hdb/custom/config/global.ini 2>/dev/null || echo "global.ini not found"
-cat /hana/shared/NKT/global/hdb/custom/config/daemon.ini 2>/dev/null || echo "daemon.ini not found"
+cat /hana/shared/HDB/global/hdb/custom/config/global.ini 2>/dev/null || echo "global.ini not found"
+cat /hana/shared/HDB/global/hdb/custom/config/daemon.ini 2>/dev/null || echo "daemon.ini not found"
 ```
 
 ### 5. Installation and trace logs
@@ -82,8 +82,8 @@ cat /hana/shared/NKT/global/hdb/custom/config/daemon.ini 2>/dev/null || echo "da
 ```
 tail -200 /var/tmp/hdbinst.log 2>/dev/null || echo "No hdbinst.log"
 tail -200 /var/tmp/hdblcm.log 2>/dev/null || echo "No hdblcm.log"
-ls -lt /hana/shared/NKT/HDB10/*/trace/*.trc 2>/dev/null | head -15
-grep -i -E 'error|fail|crash|exception|abort' /hana/shared/NKT/HDB10/*/trace/nameserver_alert_*.trc 2>/dev/null | tail -30
+ls -lt /hana/shared/HDB/HDB10/*/trace/*.trc 2>/dev/null | head -15
+grep -i -E 'error|fail|crash|exception|abort' /hana/shared/HDB/HDB10/*/trace/nameserver_alert_*.trc 2>/dev/null | tail -30
 ```
 
 ### 6. OS prerequisites for HANA
@@ -115,7 +115,7 @@ lvs 2>/dev/null
 
 ```
 /usr/sap/hostctrl/exe/saphostctrl -function Ping 2>/dev/null || echo "SAP Host Agent not responding"
-/usr/sap/hostctrl/exe/saphostctrl -function GetDatabaseStatus -dbname NKT 2>/dev/null || echo "Cannot get DB status"
+/usr/sap/hostctrl/exe/saphostctrl -function GetDatabaseStatus -dbname HDB 2>/dev/null || echo "Cannot get DB status"
 ```
 
 ### 9. Codebase context
@@ -138,7 +138,7 @@ Return your findings in this exact structure:
 
 **Target:** <hostname>
 **RHEL:** <version>
-**SID / Instance:** NKT / 10
+**SID / Instance:** HDB / 10
 **HANA Installed:** Yes / No / Partial
 **HANA Running:** Yes / No / Unknown
 **HANA Version:** <version or "not available">

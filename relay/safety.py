@@ -164,7 +164,7 @@ TARGET_SSH_ALLOWLIST = [
     "netstat ", "ethtool ",
     # SAP commands
     "/usr/sap/", "HDB ",
-    "su - nktadm -c ", "sapcontrol ",
+    "su - hdbadm -c ", "sapcontrol ",
     "last ", "who", "w ",
     # Reversible service operations
     "systemctl restart ", "systemctl reload ",
