@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 DCI deploys RHEL on bare metal servers and runs SAP HANA performance
-benchmarks. When it fails — wrong partition layout, missing package,
-incorrect performance tuning, HANA install error — an AI agent takes over.
+benchmarks. When it fails (wrong partition layout, missing package,
+incorrect performance tuning, HANA install error), an AI agent takes over.
 It triages the failure, delegates investigation to specialized subagents
 (OS deployment expert, HANA expert, general diagnostician), plans a fix
 based on their findings, gets it reviewed by an Ansible validation agent,
