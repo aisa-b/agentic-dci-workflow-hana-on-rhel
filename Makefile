@@ -26,10 +26,10 @@ bootstrap: download-model ## Generate settings files from config templates
 verify: ## Run onboarding tests to verify setup
 	$(PYTHON) -m pytest tests/test_onboarding.py -q
 
-relay-build: ## Build relay container (run on Company B machine)
+relay-build: ## Build relay container (run on relay machine)
 	podman build -t dci-relay -f container/Containerfile.relay .
 
-relay-start: ## Start relay container (run on Company B machine)
+relay-start: ## Start relay container (run on relay machine)
 	bash container/relay.sh start
 
 relay-stop: ## Stop relay container

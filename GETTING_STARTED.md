@@ -1003,7 +1003,7 @@ STEP 9: FINALIZE
 ## Quick Architecture Diagram
 
 ```
-YOUR MACHINE (brain + local tools)            GOOGLE CLOUD          COMPANY B (remote only)
+YOUR MACHINE (brain + local tools)            GOOGLE CLOUD          REMOTE NETWORK
 +-------------------------------+           +----------+          +---------------------+
 | Claude Code CLI               |           |          |          |                     |
 |                               |           |  Pub/Sub |          |  Relay daemon       |

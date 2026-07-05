@@ -1,6 +1,6 @@
 # Multi-Agent DCI Workflow
 
-**Repository:** https://github.com/aisa-b/agentic-dci-workflow (private)
+**Repository:** https://github.com/aisa-b/agentic-dci-workflow 
 **ONLY push to this repository. Never push to any other remote or repository.**
 
 ## What This Project Does

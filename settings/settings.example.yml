@@ -10,7 +10,7 @@ domain: example.corp
 jumpbox: jumpbox-hostname
 
 lab:
-  provisioner_dir: /home/beaker
+  provisioner_dir: /home/provisioner
   dhcp_start: "{{ machine_network_cidr | ipaddr(41) | ipaddr('address') }}"
   dhcp_end: "{{ machine_network_cidr | ipaddr(67) | ipaddr('address') }}"
   dns_server: 10.x.x.10

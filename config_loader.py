@@ -24,7 +24,7 @@ REPO_ROOT_ENV_VARS = ("DCI_LOCAL_REPO_ROOT", "REPO_ROOT")
 def find_config_file() -> Path:
     """Find run_config.yml by searching: env var paths, CWD, repo root, hooks dir.
 
-    The hooks repo (private) is the primary location for run_config.yml
+    The hooks repo is the primary location for run_config.yml
     since it contains environment-specific values. The main repo (public)
     has only run_config.example.yml.
     """

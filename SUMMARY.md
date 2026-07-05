@@ -8,7 +8,7 @@ pipelines on RHEL bare metal servers. Currently supports 8 target servers
 per-host configuration, parallel workflow execution, and persistent
 cross-run learning.
 
-**Repository:** https://github.com/aisa-b/agentic-dci-workflow (private)
+**Repository:** https://github.com/aisa-b/agentic-dci-workflow 
 
 ---
 

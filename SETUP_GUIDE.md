@@ -14,7 +14,7 @@ to run the commands on.
 4. [Step 2 -- Create Pub/Sub Topics and Subscriptions](#4-step-2----create-pubsub-topics-and-subscriptions)
 5. [Step 3 -- Create a Service Account](#5-step-3----create-a-service-account)
 6. [Step 4 -- Set Up Your Local Machine (Agent Side)](#6-step-4----set-up-your-local-machine-agent-side)
-7. [Step 5 -- Set Up relay-host (Relay Container)](#7-step-5----set-up-acswdf031933-relay-side)
+7. [Step 5 -- Set Up relay-host (Relay Container)](#7-step-5----set-up-relay-host-relay-side)
 8. [Step 6 -- Verify the Jumpbox (jumpbox)](#8-step-6----verify-the-jumpbox-jumpbox)
 9. [Step 7 -- Test the Pub/Sub Connection](#9-step-7----test-the-pubsub-connection)
 10. [Step 8 -- Test the Relay SSH Connection](#10-step-8----test-the-relay-ssh-connection)
