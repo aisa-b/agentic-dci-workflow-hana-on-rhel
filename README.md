@@ -2,7 +2,7 @@
 
 **AI-assisted self-repair for bare metal CI pipelines**
 
-[![CI](https://github.com/aisa-b/agentic-dci-workflow/actions/workflows/ci.yml/badge.svg)](https://github.com/aisa-b/agentic-dci-workflow/actions)
+[![CI](https://github.com/aisa-b/agentic-dci-workflow-hana-on-rhel/actions/workflows/ci.yml/badge.svg)](https://github.com/aisa-b/agentic-dci-workflow-hana-on-rhel/actions)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
 DCI deploys RHEL on bare metal servers and runs SAP HANA performance
@@ -133,7 +133,7 @@ travel through Pub/Sub to the remote infrastructure.
 ### Step 1: Clone and install
 
 ```bash
-git clone https://github.com/aisa-b/agentic-dci-workflow.git
+git clone https://github.com/aisa-b/agentic-dci-workflow-hana-on-rhel.git
 cd agentic-dci-workflow
 make install                       # Creates venv and installs dependencies
 ```
