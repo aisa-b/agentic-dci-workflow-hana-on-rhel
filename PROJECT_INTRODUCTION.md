@@ -32,7 +32,7 @@ side to expose endpoints to the other.
 The system uses Claude Opus 4.6 as an autonomous agent that can diagnose,
 plan, fix, and re-run the entire DCI pipeline without human
 intervention. Google Cloud Pub/Sub acts as the message bridge between the
-developer's machine (Company A network) and the SAP lab (Company B
+developer's machine (operator network) and the SAP lab (remote network
 network). Both sides can reach Google Cloud via HTTPS — neither needs to
 accept inbound connections.
 
@@ -50,7 +50,7 @@ Five machines participate in each run:
    `dci-results` topic. Sub-second latency, 10 MB message limit, no
    public endpoints required on either side.
 
-3. **Relay machine** (Company B Linux VM) — a lightweight daemon in a
+3. **Relay machine** (relay machine) — a lightweight daemon in a
    Podman container that translates Pub/Sub messages into SSH commands.
    It has no AI capabilities. It receives an instruction ("run this
    workflow", "execute this SSH command"), executes it on the jumpbox
@@ -58,7 +58,7 @@ Five machines participate in each run:
    component with credentials for both Google Cloud and the SAP
    network.
 
-4. **Jumpbox** (Company B) — the Ansible controller. Runs
+4. **Jumpbox** (remote network) — the Ansible controller. Runs
    `dci-rhel-agent-ctl` with hooks that define the 5-phase workflow.
    The relay does `git pull` here before each run so code changes
    propagate automatically.

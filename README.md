@@ -1,6 +1,5 @@
 # agentic-dci-workflow
 
-**AI-assisted self-repair for bare metal CI pipelines**
 
 [![CI](https://github.com/aisa-b/agentic-dci-workflow-hana-on-rhel/actions/workflows/ci.yml/badge.svg)](https://github.com/aisa-b/agentic-dci-workflow-hana-on-rhel/actions)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -71,7 +70,7 @@ graph TB
 
     PS["Google Cloud<br/>Pub/Sub"]
 
-    subgraph CompB["Company B Network"]
+    subgraph CompB["Remote Network"]
         Relay["Relay<br/>(Podman container)"]
         Jumpbox["Jumpbox<br/>(Ansible/DCI)"]
         T1["Target Server 1<br/>(bare metal HANA)"]
@@ -95,7 +94,7 @@ Multiple target servers can run workflows in parallel on the same jumpbox.
 |------|------|-----|
 | **Operator machine** | Runs Claude Code CLI, edits files, commits to git | Brain + local tools |
 | **Google Pub/Sub** | Two topics (`dci-commands`, `dci-results`) with correlation-ID request-reply pattern. Pull delivery via HTTPS, secret scrubbing before transit | Operator and jumpbox are on separate networks with no direct connectivity |
-| **Relay** | Pub/Sub-to-SSH bridge with safety enforcement (allowlists, secret scrubbing, injection detection), git sync, settings deployment, and heartbeat streaming | Sits in Company B network, only machine with SSH access to jumpbox |
+| **Relay** | Pub/Sub-to-SSH bridge with safety enforcement (allowlists, secret scrubbing, injection detection), git sync, settings deployment, and heartbeat streaming | Sits in remote network, only machine with SSH access to jumpbox |
 | **Jumpbox** | Runs Ansible (`dci-rhel-agent-ctl`), manages the target fleet | Has direct network access to target servers for OS deployment and SSH |
 | **Target servers** | Bare metal SAP HANA machines  | RHEL gets deployed, HANA installed, and benchmarks run on these servers |
 
@@ -162,11 +161,11 @@ Bootstrap automatically creates Pub/Sub topics and subscriptions if they
 don't exist yet (using the GCP project ID and SA key from `.env`).
 ### Step 4: Start the relay
 
-The relay daemon must be running on a machine in the Company B network
+The relay daemon must be running on a machine in the remote network
 before any workflow or SSH command can execute:
 
 ```bash
-# On the relay machine (Company B network):
+# On the relay machine (remote network):
 make relay-build                   # Build the relay container
 make relay-start                   # Start the relay daemon
 ```
@@ -324,7 +323,7 @@ agents/                  # Operator-side agent code
   bridge/                #   Pub/Sub messaging and usage tracking
   local/                 #   Learning system: knowledge base, run journal, relay KB,
                          #   phase model, fix loop, fleet state, workflow events
-relay/                   # Relay daemon (Podman container on Company B)
+relay/                   # Relay daemon (Podman container on remote network)
   daemon.py              #   Pub/Sub subscriber + dispatcher
   handlers.py            #   Command handlers (workflow, SSH, jumpbox, relay)
   safety.py              #   Safety enforcement (advisory + structural controls)
@@ -335,7 +334,7 @@ tools/                   # CLI utilities
   workflow_poller.py     #   Relay poller: phase/task status to JSON every 2min
   bootstrap.py           #   One-command setup
   sync_settings.py       #   Auto-sync settings before workflow runs
-container/               # Relay container (Company B side)
+container/               # Relay container (relay side)
   Containerfile.relay    #   Relay container image
   relay.sh               #   Container management (start, stop, restart, update)
   entrypoint.sh          #   Container entrypoint

@@ -14,7 +14,7 @@ MCP, Pub/Sub, or agentic architectures is assumed.
 3. [Why This Architecture and Not Another](#3-why-this-architecture-and-not-another)
 4. [Stage 1: Google Cloud Setup](#4-stage-1-google-cloud-setup)
 5. [Stage 2: Local Machine Setup (Agent Side)](#5-stage-2-local-machine-setup-agent-side)
-6. [Stage 3: Company B Linux Machine (Relay Side)](#6-stage-3-company-b-linux-machine-relay-side) -- now using Podman containers
+6. [Stage 3: Relay Machine (Relay Side)](#6-stage-3-company-b-linux-machine-relay-side) -- now using Podman containers
 7. [Stage 4: Verify Everything](#7-stage-4-verify-everything)
 8. [Stage 5: First Run](#8-stage-5-first-run) -- Claude Code CLI
 9. [What Happens During a Run](#9-what-happens-during-a-run)
@@ -206,7 +206,7 @@ We use two "mailboxes":
 - `dci-results`: The relay sends results, your machine picks them up
 
 This creates a two-way communication channel between your machine and the
-Company B network, even though they can't talk to each other directly.
+remote network, even though they can't talk to each other directly.
 
 **In our system, Pub/Sub is only used for remote operations** (workflow
 management, SSH commands, diagnostics, server profiling, relay health).
@@ -317,7 +317,7 @@ machine you control.
 
 ### Why not use a VPN or direct SSH?
 
-Your machine is on Company A's network. The jumpbox is on Company B's network.
+Your machine is on the operator network. The jumpbox is on the remote network.
 There is no VPN between them. Citrix exists but is unreliable.
 
 The only reliable connection both networks share is Google Cloud (HTTPS
@@ -350,7 +350,7 @@ capabilities -- wrapping them in MCP would add overhead without benefit.
 ## 4. Stage 1: Google Cloud Setup
 
 **What we're doing:** Creating the "postal system" (Pub/Sub) that lets
-your local machine and the Company B network exchange messages through Google Cloud.
+your local machine and the remote network exchange messages through Google Cloud.
 
 **Why:** Your machine and the jumpbox can't talk directly. Pub/Sub is the
 bridge -- both sides can send HTTPS requests to Google Cloud. But we only
@@ -467,7 +467,7 @@ gcloud iam service-accounts keys create infra/dci-relay-sa-key.json \
 
 **What this does:** Downloads a JSON file containing the service account
 credentials. This file is like a password -- keep it safe, never commit
-it to git. You'll copy it to the Company B Linux machine later.
+it to git. You'll copy it to the relay machine later.
 
 ---
 
@@ -567,16 +567,16 @@ personal Google account.
 
 ---
 
-## 6. Stage 3: Company B Linux Machine (Relay Side)
+## 6. Stage 3: Relay Machine (Relay Side)
 
 **What we're doing:** Setting up the relay daemon -- a small service that
-sits on the Company B network. It handles remote operations: running
+sits on the remote network. It handles remote operations: running
 workflows, executing SSH commands, gathering diagnostics, managing server
 profiles, and providing health/status information. No file editing, no git
 commands -- those all happen locally.
 
 **Why:** The relay is just the "remote hands" for operations that
-physically require the Company B network. It can SSH to the jumpbox and
+physically require the remote network. It can SSH to the jumpbox and
 the target server. Your machine cannot.
 
 The relay now runs in a **Podman container** for reproducibility and
@@ -774,7 +774,7 @@ print(f'Published: {future.result()}')
 "
 ```
 
-**On the Company B Linux machine** (inside the running container):
+**On the relay machine** (inside the running container):
 
 ```bash
 podman exec dci-relay python3 -c "
@@ -796,7 +796,7 @@ is functional.
 
 ### 7.2. Test SSH from relay to jumpbox
 
-**On the Company B Linux machine:**
+**On the relay machine:**
 
 ```bash
 ssh <jumpbox-user>@jumpbox "hostname && echo OK"
@@ -847,7 +847,7 @@ running. Check with:
 systemctl --user status dci-relay.service
 ```
 
-Otherwise, start it manually **on the Company B Linux machine:**
+Otherwise, start it manually **on the relay machine:**
 
 ```bash
 cd ~/dci-agent
@@ -1042,7 +1042,7 @@ YOUR MACHINE (brain + local tools)            GOOGLE CLOUD          COMPANY B (r
 ```
 
 **Key insight:** The operator machine does everything except what physically
-requires the Company B network. File operations are instant (local filesystem).
+requires the remote network. File operations are instant (local filesystem).
 Git operations are instant (local git, push to GitHub). Only running the
 Ansible workflow, SSHing to target servers, and managing the relay require
 the Pub/Sub bridge.

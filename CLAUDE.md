@@ -297,7 +297,7 @@ Collects benchmark results and pushes them to the DCI backend.
 - `config_loader.py` -- Shared config module for agents/config.py and relay/config.py (DRY, unified env var handling)
 - `tools/workflow_poller.py` -- Standalone poller: queries relay every 2min, writes phase/task status to JSON
 
-### Relay Layer (Company B Linux machine)
+### Relay Layer (relay machine)
 - `relay/daemon.py` -- Pub/Sub subscriber + threaded dispatcher
 - `relay/ssh_manager.py` -- Persistent SSH to jumpbox + two-hop to target
 - `relay/handlers.py` -- Command handlers (workflow.run/list/stop/stop_all, ssh.execute/diagnostics, jumpbox.ping/execute, relay.update)

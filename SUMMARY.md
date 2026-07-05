@@ -257,7 +257,7 @@ Pub/Sub relay.
 | **Claude Opus 4.6** | AI model | The brain that reasons and decides |
 | **Anthropic SDK** | API client | Talks to Claude via Vertex AI |
 | **Google Vertex AI** | AI platform | Enterprise access to Claude |
-| **Google Cloud Pub/Sub** | Messaging | Bridges operator and Company B network |
+| **Google Cloud Pub/Sub** | Messaging | Bridges operator and remote network |
 | **Podman** | Containerization | Runs relay daemon in isolated container |
 | **Paramiko** | SSH library | Connects relay to jumpbox and target |
 | **Git CLI** | Version control | Local branch, commit, push, revert |
@@ -303,7 +303,7 @@ Pub/Sub relay.
   `/dci-run <hostname>` independently with per-host settings files
 
 ### Why Pub/Sub (not HTTP, WebSocket, etc.)
-- Operator and Company B can't talk directly (separate networks)
+- Operator and remote networks can't talk directly (separate networks)
 - Both can reach Google Cloud via HTTPS
 - Pub/Sub: real-time, 10MB messages, pull delivery (no public endpoints)
 - Correlation ID pattern turns fire-and-forget into request-response
@@ -421,7 +421,7 @@ settings/                  # Per-hostname settings files (generated, not hand-ed
   settings_current_target-2.yml
   ...
 
-relay/                     # Company B Linux machine side
+relay/                     # relay machine side
   daemon.py                # Pub/Sub subscriber + threaded dispatcher
   ssh_manager.py           # Persistent SSH to jumpbox + two-hop to target
   handlers.py              # MCP tool handlers

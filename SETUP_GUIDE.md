@@ -31,7 +31,7 @@ Three machines, two networks, one Google Cloud bridge.
 Multiple target servers are supported in parallel (target-1, target-2, target-4, etc.):
 
 ```
-Your Machine (Company A)                              Company B Network
+Your Machine (Operator)                              Remote Network
  |                                                    |
  |  Claude Code CLI + MCP tools                       |  relay-host (relay daemon)
  |  File edits + git ops happen locally               |    - Runs in a Podman container (UBI9)
@@ -66,8 +66,8 @@ Before you start, make sure you have:
 - [ ] A Google Cloud account with billing enabled
 - [ ] `gcloud` CLI installed on your machine ([install guide](https://cloud.google.com/sdk/docs/install))
 - [ ] Python 3.10 or newer on your machine
-- [ ] Podman (or Docker) installed on the Company B Linux machine
-- [ ] SSH access from the Company B Linux machine to the jumpbox (jumpbox) as user `<jumpbox-user>`
+- [ ] Podman (or Docker) installed on the relay machine
+- [ ] SSH access from the relay machine to the jumpbox (jumpbox) as user `<jumpbox-user>`
 - [ ] The repo cloned on the jumpbox at `/agentic-dci-workflow/`
 - [ ] A local clone of the repo on your machine (file edits and git ops happen locally)
 - [ ] Claude Code CLI installed (`npm install -g @anthropic-ai/claude-code`)
@@ -220,7 +220,7 @@ gcloud iam service-accounts keys create infra/dci-relay-sa-key.json \
 
 **IMPORTANT:** This JSON file is a credential. Treat it like a password.
 - Do NOT commit it to git (it is already in `.gitignore`)
-- You will need to copy it to the Company B Linux machine later
+- You will need to copy it to the relay machine later
 
 ### 5.4. Verify the key works
 
@@ -330,7 +330,7 @@ Claude on Vertex AI.
 
 ## 7. Step 5 -- Set Up relay-host (Relay Side)
 
-**Run on: relay-host (Company B Linux machine)**
+**Run on: relay-host (relay machine)**
 
 The relay now runs in a Podman container based on UBI9 with Python 3.12.
 No Python venv setup is needed on the host -- everything is inside the container.
@@ -435,7 +435,7 @@ ssh <jumpbox-user>@jumpbox "ssh root@target-1.example.corp 'hostname && echo OK'
 
 ## 8. Step 6 -- Verify the Jumpbox (jumpbox)
 
-**Run on: Jumpbox (via SSH from Company B Linux machine)**
+**Run on: Jumpbox (via SSH from relay machine)**
 
 The jumpbox needs NO changes. Just verify things are in place:
 
@@ -489,7 +489,7 @@ exit
 
 ## 9. Step 7 -- Test the Pub/Sub Connection
 
-**Run on: Your local machine first, then Company B Linux machine**
+**Run on: Your local machine first, then relay machine**
 
 This test verifies that messages flow between your machine and the Linux machine
 through Google Cloud.

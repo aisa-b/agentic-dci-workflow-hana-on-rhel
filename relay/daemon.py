@@ -1,7 +1,7 @@
 """
 Relay daemon -- Pub/Sub subscriber that dispatches commands to handlers.
 
-Runs on the Company B Linux machine. Subscribes to the dci-commands topic,
+Runs on the relay machine. Subscribes to the dci-commands topic,
 executes operations on the jumpbox via SSH, and publishes results to
 the dci-results topic.
 
